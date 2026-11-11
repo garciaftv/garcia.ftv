@@ -195,6 +195,11 @@ footer{background:#eee9e4;padding:30px 0;color:var(--muted);font-size:12px;text-
         <label for="pix-code" style="text-align:left">PIX Copia e Cola</label>
         <textarea id="pix-code" readonly style="width:100%;min-height:105px;padding:12px;border:1px solid #ded7d1;border-radius:8px;background:#fff;color:#302820;font:inherit;font-size:12px;resize:vertical"></textarea>
         <button type="button" id="copy-pix" class="submit" style="margin-top:10px">COPIAR PIX COPIA E COLA</button>
+       <div id="payment-status" style="margin-top:18px;padding:16px;border-radius:10px;background:#fff;border:1px solid #d6e6ed;color:#634b3d;text-align:center">
+  <div id="payment-status-icon" style="font-size:25px">⏳</div>
+  <strong id="payment-status-title" style="display:block;margin-top:5px">AGUARDANDO CONFIRMAÇÃO DO PAGAMENTO</strong>
+  <small id="payment-status-message" style="display:block;margin-top:6px;color:#766e68">Assim que o pagamento for conferido pela organização, a confirmação aparecerá automaticamente aqui.</small>
+</div>
         <small style="display:block;margin-top:12px;color:#766e68">Após realizar o pagamento, aguarde a confirmação da inscrição.</small>
         <small style="display:block;margin-top:8px;color:#766e68"><strong>PIX realizado em nome de terceiro?</strong> Envie o comprovante no Direct do Instagram do aulão: <a href="https://www.instagram.com/garcia.ftv/" target="_blank" rel="noopener noreferrer" style="font-weight:800;color:#634b3d">@garcia.ftv</a>.</small>
       </div>
@@ -219,6 +224,74 @@ footer{background:#eee9e4;padding:30px 0;color:var(--muted);font-size:12px;text-
   let nextUrl='';
   let submitted=false;
   let pixSelected=false;
+  const statusUrl='https://script.google.com/macros/s/AKfycbyo5feFndnCfhJx3zfjRiIFstTm-I0lTf-8L5Zq9PFBrikPd__ybEhr7fOpDBsmPs-avw/exec';
+
+let paymentTimer=null;
+let paymentConfirmed=false;
+
+function showPaymentConfirmed(){
+  paymentConfirmed=true;
+
+  if(paymentTimer){
+    clearInterval(paymentTimer);
+    paymentTimer=null;
+  }
+
+  const box=document.getElementById('payment-status');
+  const icon=document.getElementById('payment-status-icon');
+  const title=document.getElementById('payment-status-title');
+  const message=document.getElementById('payment-status-message');
+
+  box.style.background='#eef8f1';
+  box.style.borderColor='#9bc9a7';
+  box.style.color='#285c36';
+
+  icon.textContent='✅';
+  title.textContent='PAGAMENTO CONFIRMADO!';
+  message.textContent='Sua inscrição no Aulão Garcia Futevôlei está garantida. 🤎🩵';
+}
+
+  function checkPaymentStatus(email){
+  if(!email || paymentConfirmed) return;
+
+  const callbackName='paymentCallback_'+Date.now()+'_'+Math.random().toString(36).slice(2);
+  const script=document.createElement('script');
+
+  window[callbackName]=function(response){
+    try{
+      if(response && response.pago===true){
+        showPaymentConfirmed();
+      }
+    }finally{
+      delete window[callbackName];
+      script.remove();
+    }
+  };
+
+  script.onerror=function(){
+    delete window[callbackName];
+    script.remove();
+  };
+
+  script.src=statusUrl+'?email='+encodeURIComponent(email)+'&callback='+encodeURIComponent(callbackName);
+  document.body.appendChild(script);
+}
+
+function startPaymentCheck(email){
+  if(!email) return;
+
+  paymentConfirmed=false;
+
+  if(paymentTimer){
+    clearInterval(paymentTimer);
+  }
+
+  checkPaymentStatus(email);
+
+  paymentTimer=setInterval(function(){
+    checkPaymentStatus(email);
+  },15000);
+}
   const pix75='00020101021126640014br.gov.bcb.pix0121estelag0806@gmail.com0217Inscricao  Camisa520400005303986540575.005802BR5920ESTELA M DE O GARCIA6013RIO DE JANEIR62070503***63044802';
   const pix100='00020101021126750014br.gov.bcb.pix0121estelag0806@gmail.com0228Inscricao  Uniforme Completo5204000053039865406100.005802BR5920ESTELA M DE O GARCIA6013RIO DE JANEIR62070503***6304E109';
   const qr75='pix_75.jpeg';
@@ -251,6 +324,8 @@ footer{background:#eee9e4;padding:30px 0;color:var(--muted);font-size:12px;text-
       value.textContent=is100 ? 'Valor: R$ 100,00' : 'Valor: R$ 75,00';
       panel.style.display='block';
       panel.scrollIntoView({behavior:'smooth',block:'center'});
+      const registeredEmail=document.getElementById('email').value.trim().toLowerCase();
+startPaymentCheck(registeredEmail);
       btn.disabled=false;
       btn.textContent='CONTINUAR PARA O PAGAMENTO';
       return;
