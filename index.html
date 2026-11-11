@@ -1,22 +1,240 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Aulão Garcia Futevôlei</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#b9d9e8">
+<title>Aulão EG | Inscrições</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box}html{scroll-behavior:smooth}body{font-family:Arial,Helvetica,sans-serif;background:#BFDDE5;color:#3d2929;line-height:1.6}header{background:#fff;padding:18px 7%;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,.06)}.logo{font-size:22px;font-weight:bold;letter-spacing:3px}nav a{color:#3d2929;text-decoration:none;margin-left:20px;font-weight:bold;font-size:14px}.hero{min-height:88vh;background:#BFDDE5;color:#fff;display:flex;justify-content:center;align-items:center;text-align:center;padding:60px 20px}.hero-content{max-width:850px}.tag{background:#4A3028;color:#fff;display:inline-block;padding:8px 18px;border-radius:30px;font-size:13px;font-weight:bold;margin-bottom:25px}.hero h1{color:#4A3028;font-size:clamp(48px,8vw,86px);line-height:.95;text-transform:uppercase;margin-bottom:20px}.hero h2{color:#4A3028;font-size:25px;font-weight:normal;margin-bottom:25px}.info-rapida{display:flex;justify-content:center;flex-wrap:wrap;gap:12px;margin-bottom:30px}.info-rapida span,.pagamento-opcoes span{background:rgba(255,255,255,.95);color:#3d2929;padding:10px 16px;border-radius:30px;font-weight:bold}.botao{display:inline-block;background:#3d2929;color:#fff;text-decoration:none;padding:17px 30px;border-radius:40px;font-weight:bold}section{padding:80px 8%}.titulo{text-align:center;max-width:750px;margin:0 auto 45px}.titulo small{color:#4A3028;font-weight:bold;letter-spacing:2px}.titulo h2{font-size:40px;line-height:1.2;margin-top:8px}.titulo p{color:#756868;margin-top:12px}.informacoes,.precos{background:#fff}.info-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;max-width:1000px;margin:auto}.info-card{background:#EFF7F8;padding:35px 25px;border-radius:22px;text-align:center}.emoji{font-size:38px}.info-card h3{color:#4A3028;font-size:14px;margin:12px 0 6px;letter-spacing:1px}.sobre{text-align:center;max-width:800px;margin:auto;font-size:18px;color:#716565}.categorias-titulo{text-align:center;color:#4A3028;font-size:28px;margin:35px 0 25px}.categorias-grid{display:flex;justify-content:center;flex-wrap:wrap;gap:15px;max-width:900px;margin:0 auto}.categoria{background:#fff;color:#4A3028;padding:18px 26px;border-radius:30px;font-weight:bold;min-width:120px;text-align:center;box-shadow:0 4px 12px rgba(0,0,0,.05)}.beneficios,.pagamento{background:#EFF7F8}.beneficio-grid{display:grid;grid-template-columns:repeat(4,1fr);max-width:1100px;margin:auto;gap:20px}.beneficio{background:#fff;border-radius:20px;padding:32px 20px;text-align:center}.beneficio .emoji{font-size:40px;margin-bottom:10px}.preco-grid{max-width:800px;margin:auto;display:grid;grid-template-columns:1fr 1fr;gap:25px}.preco{background:#EFF7F8;padding:40px;border-radius:25px;text-align:center}.preco.destaque{border:2px solid #BFDDE5}.preco h3{font-size:22px}.valor{color:#4A3028;font-size:50px;font-weight:bold;margin:15px 0}.preco ul{list-style:none;margin:25px 0;text-align:left}.preco li{padding:7px 0}.preco li:before{content:'✓';color:#4A3028;font-weight:bold;margin-right:8px}.pagamento{text-align:center}.pagamento-opcoes{display:flex;justify-content:center;gap:15px;margin-top:25px;flex-wrap:wrap}.final{background:#BFDDE5;color:#fff;text-align:center}.final h2{color:#4A3028;font-size:45px;margin-bottom:12px}.final p{color:#4A3028;margin-bottom:25px}.instagram{background:#fff;text-align:center;padding:35px 8% 0}.instagram-link{display:inline-flex;align-items:center;gap:12px;color:#4A3028;text-decoration:none;font-weight:bold;font-size:18px}.instagram-icon{width:34px;height:34px;display:block;fill:#4A3028}footer{background:#2b1c1c;color:#fff;text-align:center;padding:30px}@media(max-width:750px){nav{display:none}.info-cards{grid-template-columns:1fr}.beneficio-grid{grid-template-columns:1fr 1fr}.preco-grid{grid-template-columns:1fr}}@media(max-width:450px){.beneficio-grid{grid-template-columns:1fr}}
+
+:root{
+  --blue:#b9d9e8;
+  --blue-soft:#edf5f8;
+  --blue-deep:#8fbfd2;
+  --brown:#634b3d;
+  --brown-dark:#49372d;
+  --brown-soft:#8a705e;
+  --ink:#302820;
+  --muted:#766e68;
+  --white:#fff;
+  --line:#e8e1dc;
+  --paper:#fbfaf8;
+  --shadow:0 14px 38px rgba(63,47,37,.08);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:Arial,Helvetica,sans-serif;line-height:1.6}
+a{color:inherit}
+.wrap{width:min(1120px,92%);margin:auto}
+header{background:linear-gradient(135deg,#c6e1ec 0%,#b5d7e5 55%,#dcecf2 100%);padding:24px 0 68px;position:relative;overflow:hidden}
+header:before,header:after{content:"";position:absolute;border:1px solid rgba(99,75,61,.13);border-radius:50%;pointer-events:none}
+header:before{width:440px;height:440px;right:-170px;top:-230px}
+header:after{width:250px;height:250px;left:-150px;bottom:-170px}
+nav{display:flex;justify-content:space-between;align-items:center;gap:16px;position:relative;z-index:1;padding-bottom:12px}
+.brand{font-weight:900;letter-spacing:.13em;color:var(--brown);font-size:23px}
+.brand span{font-size:18px;margin-left:5px}
+.navtag{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--brown);font-weight:800}
+.hero{display:grid;grid-template-columns:1.08fr .92fr;gap:54px;align-items:center;padding-top:48px;position:relative;z-index:1}
+.eyebrow,.section-kicker{font-size:11px;font-weight:800;letter-spacing:.19em;text-transform:uppercase;color:var(--brown-soft)}
+h1{font-size:clamp(42px,6vw,70px);line-height:.98;letter-spacing:-.05em;color:var(--brown);margin:14px 0 20px}
+.hero p{max-width:500px;color:#5f5047;font-size:17px;margin:0 0 24px}
+.pill{display:inline-flex;align-items:center;gap:9px;border:1px solid rgba(99,75,61,.25);background:rgba(255,255,255,.34);padding:10px 15px;border-radius:999px;color:var(--brown);font-size:12px;font-weight:800;letter-spacing:.04em}
+.cta{display:inline-flex;align-items:center;justify-content:center;text-decoration:none;background:var(--brown);color:white;padding:15px 24px;border-radius:8px;font-weight:800;font-size:13px;letter-spacing:.04em;margin-top:24px;box-shadow:0 8px 18px rgba(73,55,45,.15);transition:.2s}
+.cta:hover{background:var(--brown-dark);transform:translateY(-2px)}
+.hero-art{min-height:360px;border-radius:22px;background:linear-gradient(145deg,rgba(99,75,61,.07),rgba(255,255,255,.5)),repeating-linear-gradient(135deg,#d5e8f0 0 18px,#c6e0eb 18px 36px);display:flex;align-items:center;justify-content:center;padding:28px;position:relative;overflow:hidden}
+.art-card{background:rgba(255,255,255,.94);border:1px solid rgba(99,75,61,.12);border-radius:17px;padding:34px 26px;text-align:center;width:min(330px,100%);box-shadow:0 18px 50px rgba(70,54,43,.12)}
+.art-star{font-size:30px;color:var(--brown-soft)}
+.art-card strong{display:block;color:var(--brown);font-size:33px;letter-spacing:.08em;margin:6px 0}
+.art-card small{font-size:10px;letter-spacing:.2em;color:var(--brown-soft);font-weight:700}
+section{padding:72px 0}
+h2{font-size:clamp(28px,4vw,40px);line-height:1.12;color:var(--brown);letter-spacing:-.035em;margin:9px 0 14px}
+.intro{color:var(--muted);max-width:680px;margin:0}
+.details{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:32px}
+.detail{background:white;border:1px solid var(--line);border-radius:14px;padding:23px;box-shadow:0 6px 20px rgba(63,47,37,.035)}
+.detail b{display:block;color:var(--brown-soft);font-size:11px;letter-spacing:.13em;text-transform:uppercase;margin-bottom:9px}
+.detail span{font-size:15px;line-height:1.7}
+.packages-section{background:#f3f0ed}
+.packages{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:30px}
+.package{border:1px solid var(--line);border-radius:16px;background:white;padding:28px;position:relative;box-shadow:0 7px 22px rgba(63,47,37,.04)}
+.package.featured{background:white;color:var(--ink);border-color:var(--line);box-shadow:0 7px 22px rgba(63,47,37,.04)}
+.package .name{font-size:12px;font-weight:800;letter-spacing:.12em;text-transform:uppercase}
+.price{font-size:42px;font-weight:900;letter-spacing:-.05em;margin:10px 0}
+.package p{font-size:14px;margin:0;color:var(--muted)}
+.package.featured p{color:var(--muted)}
+.payment-note{font-size:13px;color:var(--muted);margin-top:20px}
+.form-section{background:var(--blue-soft)}
+.form-layout{display:grid;grid-template-columns:.78fr 1.22fr;gap:30px;align-items:start}
+.side-note{background:var(--brown);color:white;padding:30px;border-radius:16px;position:sticky;top:22px;box-shadow:var(--shadow)}
+.side-note h3{font-size:25px;line-height:1.2;margin:10px 0 12px}
+.side-note p{color:#eee4dc;font-size:14px;margin:0}
+form{background:white;border:1px solid rgba(99,75,61,.1);border-radius:16px;padding:30px;box-shadow:var(--shadow)}
+form h2{font-size:30px;margin-top:5px}
+label{display:block;font-size:13px;font-weight:800;color:var(--brown);margin:18px 0 7px}
+input,select{width:100%;padding:14px 15px;border:1px solid #ded7d1;border-radius:8px;font:inherit;font-size:14px;background:#fff;color:var(--ink);transition:border .2s,box-shadow .2s}
+input:focus,select:focus{outline:0;border-color:var(--blue-deep);box-shadow:0 0 0 3px rgba(143,191,210,.2)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:15px}
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.choice{border:1px solid #ded7d1;border-radius:10px;padding:15px;cursor:pointer;display:flex;gap:10px;align-items:flex-start;transition:.2s;margin:0}
+.choice:hover{border-color:var(--blue-deep);background:#fbfdfe}
+.choice:has(input:checked){border-color:var(--brown);background:#f7f2ee;box-shadow:inset 0 0 0 1px var(--brown)}
+.choice input{width:auto;margin:4px 0 0;accent-color:var(--brown)}
+.choice strong{display:block;color:var(--brown);font-size:15px}
+.choice small{display:block;color:var(--muted);font-size:12px;margin-top:3px}
+.summary{background:#f5f2ef;border:1px solid #eee7e1;border-radius:10px;padding:17px;margin-top:22px;display:flex;justify-content:space-between;align-items:center;gap:12px}
+.summary span{font-size:13px;color:var(--muted)}
+.summary strong{font-size:22px;color:var(--brown)}
+.submit{width:100%;border:0;background:var(--brown);color:white;border-radius:8px;padding:16px;font-weight:800;font-size:13px;letter-spacing:.06em;margin-top:18px;cursor:pointer;transition:.2s}
+.submit:hover{background:var(--brown-dark);transform:translateY(-1px)}
+.notice{font-size:11px;line-height:1.5;color:var(--muted);margin:13px 0 0}
+#result{display:none;margin-top:16px;padding:15px;border-radius:9px;background:#edf6f9;color:#355666;font-size:13px}
+footer{background:#eee9e4;padding:30px 0;color:var(--muted);font-size:12px;text-align:center;line-height:1.8}
+@media(max-width:760px){
+ .wrap{width:min(100% - 36px,560px)}
+ header{padding:20px 0 48px}
+ .hero,.form-layout{grid-template-columns:1fr}
+ .hero{padding-top:34px;gap:28px}
+ .hero-art{min-height:270px}
+ .details{grid-template-columns:1fr;gap:12px}
+ .packages{grid-template-columns:1fr}
+ .grid2{grid-template-columns:1fr;gap:0}
+ .choices{grid-template-columns:1fr}
+ section{padding:52px 0}
+ .side-note{position:static}
+ form{padding:22px}
+ .navtag{font-size:9px;text-align:right}
+}
+@media(max-width:380px){
+ h1{font-size:40px}
+ .pill{font-size:10px}
+ .summary{align-items:flex-start;flex-direction:column}
+}
+
 </style>
 </head>
 <body>
-<header><div class="logo">GARCIA</div><nav><a href="#evento">O Aulão</a><a href="#incluso">O que inclui</a><a href="#inscricao">Inscrição</a></nav></header>
-<section class="hero"><div class="hero-content"><div class="tag">AULÃO EXCLUSIVO PARA MULHERES</div><h1>Garcia<br>Futevôlei</h1><h2>Aulão de Futevôlei Feminino</h2><div class="info-rapida"><span>📅 17/01/2027</span><span>⏰ A partir das 7h</span><span>📍 P4 BEACH SPORTS</span></div><a class="botao" href="#inscricao">QUERO FAZER MINHA INSCRIÇÃO</a></div></section>
-<section class="informacoes" id="evento"><div class="titulo"><h2>Nosso encontro está marcado!</h2></div><div class="info-cards"><div class="info-card"><div class="emoji">📅</div><h3>DATA</h3><p><strong>17 de janeiro de 2027</strong></p></div><div class="info-card"><div class="emoji">⏰</div><h3>HORÁRIO</h3><p><strong>A partir das 7h</strong></p></div><div class="info-card"><div class="emoji">📍</div><h3>LOCAL</h3><p><strong>P4 BEACH SPORTS</strong><br>Rua Ferreira de Andrade, 649<br>Cachambi - Rio de Janeiro/RJ</p></div></div><div class="instagram"><a class="instagram-link" href="https://www.instagram.com/garcia.ftv/" target="_blank" rel="noopener noreferrer" aria-label="Acompanhe tudo no nosso Instagram"><svg class="instagram-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5Zm0 2a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3H7Zm11.5 1.5a1 1 0 1 1 0 2 1 1 0 0 1 0-2ZM12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10Zm0 2a3 3 0 1 0 0 6 3 3 0 0 0 0-6Z"/></svg><span>Acompanhe tudo no nosso Instagram</span></a></div></section>
-<section><div class="titulo"><small>O EVENTO</small><h2>Um aulão feito para elas ♡</h2></div><div class="sobre"><p>O Aulão Garcia Futevôlei foi pensado especialmente para mulheres que querem aprender, evoluir e aproveitar uma experiência incrível dentro das quadras.</p><p>As aulas serão divididas por níveis, permitindo que cada participante treine de acordo com sua experiência no esporte.</p></div><h3 class="categorias-titulo">Categorias</h3><div class="categorias-grid"><div class="categoria">PRIMEIRO TOQUE</div><div class="categoria">B</div><div class="categoria">B+</div><div class="categoria">A</div><div class="categoria">A+</div></div></section>
-<section class="beneficios" id="incluso"><div class="titulo"><small>EXPERIÊNCIA COMPLETA</small><h2>O que vai ter?</h2><p>Muito mais que uma aula de futevôlei.</p></div><div class="beneficio-grid"><div class="beneficio"><div class="emoji">🏐</div><h3>Aulão</h3><p>Treino dividido por níveis.</p></div><div class="beneficio"><div class="emoji">☕</div><h3>Café da manhã</h3><p>Café da manhã para nossas participantes.</p></div><div class="beneficio"><div class="emoji">📸</div><h3>Fotógrafo</h3><p>Registros especiais do nosso aulão.</p></div><div class="beneficio"><div class="emoji">👕</div><h3>Uniforme</h3><p>Escolha entre camisa ou uniforme completo.</p></div></div></section>
-<section class="precos" id="inscricao"><div class="titulo"><small>INSCRIÇÕES</small><h2>Escolha sua opção ♡</h2><p>Escolha como você quer participar do nosso aulão.</p></div><div class="preco-grid"><div class="preco"><h3>Inscrição + Camisa</h3><div class="valor">R$ 75</div><ul><li>Participação no aulão</li><li>Camisa oficial</li><li>Café da manhã</li><li>Fotógrafo</li></ul><a class="botao" href="#">QUERO ESSA OPÇÃO</a></div><div class="preco destaque"><h3>Uniforme Completo ♡</h3><div class="valor">R$ 100</div><ul><li>Participação no aulão</li><li>Camisa oficial</li><li>Short oficial</li><li>Café da manhã</li><li>Fotógrafo</li></ul><a class="botao" href="#">QUERO O COMPLETO</a></div></div></section>
-<section class="pagamento"><div class="titulo"><small>FORMAS DE PAGAMENTO</small><h2>Escolha como pagar</h2><p>Escolha a opção mais confortável para você.</p></div><div class="pagamento-opcoes"><span>⚡ PIX</span><span>💳 Cartão de crédito</span></div></section>
-<section class="final"><h2>Vem jogar com a gente! ♡</h2><p>Garanta sua vaga no Aulão Garcia Futevôlei.</p><a class="botao" href="#">FAZER MINHA INSCRIÇÃO</a></section>
-<footer><strong>GARCIA FUTEVÔLEI</strong><br>Aulão de Futevôlei Feminino</footer>
+<header>
+  <div class="wrap">
+    <nav><div class="brand">EG <span>✦</span></div><div class="navtag">Evento feminino • 2027</div></nav>
+    <div class="hero">
+      <div>
+        <div class="eyebrow">Esporte • Conexão • Futevôlei</div>
+        <h1>Aulão de<br>Futevôlei<br>Feminino</h1>
+        <p>Vem aí o nosso primeiro aulão feminino de futevôlei.<br>Um encontro feito especialmente para nós, mulheres.<br><br>A ideia é reunir desde as meninas que nunca tocaram em uma bola até aquelas que já dominam o esporte. Mas não se preocupem, <strong>as aulas serão divididas por níveis</strong>, para que cada menina possa aproveitar a aula da melhor forma, treinando de acordo com sua experiência e ritmo.</p>
+        <p>Além das aulas, o evento contará com café da manhã para as alunas e fotógrafo para registrar os melhores cliques das aulas.</p>
+        <div class="pill">✦ &nbsp; 17 JAN 2027 &nbsp;·&nbsp; A PARTIR DAS 7H</div><br>
+        <a class="cta" href="#inscricao" id="go-registration">FAZER MINHA INSCRIÇÃO</a>
+      </div>
+      <div class="hero-art"><div class="art-card"><div class="art-star">✦</div><strong>AULÃO EG</strong><small>FUTEVÔLEI FEMININO</small><div style="height:1px;background:#d8cec5;margin:18px 0"></div><div style="color:#634b3d;font-weight:700;font-size:15px">17.01.2027</div><div style="color:#806653;font-size:12px;margin-top:4px">P4 BEACH SPORTS</div><div style="color:#806653;font-size:11px;margin-top:4px">Rua Ferreira de Andrade, 649 - Cachambi/RJ</div></div></div>
+    </div>
+  </div>
+</header>
+<main>
+
+<section class="packages-section">
+  <div class="wrap">
+    <div class="section-kicker">Escolha seu pacote</div><h2>Opções de inscrição</h2>
+    <div class="packages">
+      <div class="package"><div class="name">Inscrição + camisa</div><div class="price">R$ 75,00</div><p>Participação no aulão com camisa do evento.</p></div>
+      <div class="package featured"><div class="name">Inscrição + uniforme completo</div><div class="price">R$ 100,00</div><p>Participação no aulão com uniforme completo.</p></div>
+    </div>
+    <p class="payment-note">Pagamento por Pix ou cartão de crédito (sujeito a taxas).</p>
+  </div>
+</section>
+<section class="form-section" id="inscricao">
+  <div class="wrap form-layout">
+    <div class="side-note"><div class="section-kicker" style="color:#c6e0eb">Inscrições abertas</div><h3>Garanta sua participação.</h3><p>Preencha seus dados com atenção. O tamanho do uniforme deve ser informado de acordo com a tabela de medidas divulgada pela organização.</p><p style="margin-top:18px">Tamanhos disponíveis: PP, P, M, G e GG.</p></div>
+    <iframe name="registration-target" id="registration-target" style="display:none"></iframe>
+    <form id="registration" action="https://script.google.com/macros/s/AKfycbyo5feFndnCfhJx3zfjRiIFstTm-I0lTf-8L5Zq9PFBrikPd__ybEhr7fOpDBsmPs-avw/exec" method="POST" target="registration-target">
+      <div class="section-kicker">Formulário</div><h2 style="font-size:29px;margin-top:5px">Seus dados</h2>
+      <div class="grid2">
+        <div><label for="name">Nome completo *</label><input id="name" name="nome" autocomplete="name" placeholder="Seu nome" required></div>
+        <div><label for="phone">WhatsApp *</label><input id="phone" name="whatsapp" autocomplete="tel" placeholder="(21) 99999-9999" required></div>
+      </div>
+      <label for="email">E-mail *</label><input id="email" name="email" type="email" autocomplete="email" placeholder="voce@email.com" required>
+      <label for="category">Qual categoria você se enquadra? *</label>
+      <select id="category" name="categoria" required>
+        <option value="">Selecione sua categoria</option>
+        <option>PRIMEIRO TOQUE (Nunca fiz futevôlei)</option>
+        <option>B (Possuo pouca experiência com o esporte e possuo dificuldade ainda nos fundamentos)</option>
+        <option>B+ (Possuo erros constantes nos fundamentos, mas já consigo fazer pequenas situações de jogo)</option>
+        <option>A (Consigo trabalhar os três toques sem ajuda de uma menina de nível acima)</option>
+        <option>A+ (Possuo baixo erro nos fundamentos e mantenho um volume de jogo alto)</option>
+      </select>
+      <label for="package">Qual pacote você deseja? *</label>
+      <select id="package" name="pacote" required>
+        <option value="">Selecione o pacote</option>
+        <option value="Inscrição + camisa (R$ 75,00)" data-payment="https://mpago.li/1re2Akz">Inscrição + camisa - R$ 75,00</option>
+        <option value="Inscrição + uniforme completo (R$ 100,00)" data-payment="https://mpago.li/2JxibkG">Inscrição + uniforme completo - R$ 100,00</option>
+      </select>
+      <label>Meio de pagamento *</label>
+      <div class="choices" style="margin-bottom:16px">
+        <label class="choice"><input type="radio" name="meio_pagamento" value="PIX (sem acréscimos)" required> <span><strong>PIX</strong><small>Sem acréscimos</small></span></label>
+        <label class="choice"><input type="radio" name="meio_pagamento" value="Cartão de crédito (sujeito a taxas)" required> <span><strong>Cartão de crédito</strong><small>Sujeito a taxas</small></span></label>
+      </div>
+      <label for="size">Tamanho do uniforme *</label>
+      <select id="size" name="tamanho" required><option value="">Selecione o tamanho</option><option>PP</option><option>P</option><option>M</option><option>G</option><option>GG</option></select>
+
+      <div style="margin-top:22px">
+        <label class="choice" style="align-items:flex-start">
+          <input type="checkbox" name="imageDataConsent" required>
+          <span><strong>TERMO DE AUTORIZAÇÃO DE USO DE IMAGEM E DADOS *</strong><small>Autorizo os organizadores e eventuais parceiros a captarem e utilizarem dados e imagens no qual eu apareça, registradas durante a aula, para fins de divulgação institucional e promocional em redes sociais, sites, materiais publicitários e demais canais de comunicações, sem que isso gere qualquer direito a remuneração.</small></span>
+        </label>
+        <label class="choice" style="align-items:flex-start;margin-top:12px">
+          <input type="checkbox" name="cancellationConsent" required>
+          <span><strong>TERMO DE CIÊNCIA - POLÍTICA DE CANCELAMENTO *</strong><small>Estou ciente de que, após a confirmação do pagamento, não haverá reembolso em caso de desistência ou não comparecimento. Caso eu queira, eu poderei transferir a minha vaga para outra pessoa, mediante comunicação prévia aos organizadores.</small></span>
+        </label>
+      </div>
+      <button class="submit" type="submit">CONTINUAR PARA O PAGAMENTO</button>
+      <p class="notice"></p>
+      <div id="result" role="status"></div>
+    </form>
+  </div>
+</section>
+</main>
+<footer><div class="wrap">AULÃO EG · FUTEVÔLEI FEMININO · 17.01.2027</div></footer>
+
+
+<script>
+(function(){
+  document.getElementById('go-registration').addEventListener('click', function(e){
+    e.preventDefault();
+    document.getElementById('inscricao').scrollIntoView({behavior:'smooth',block:'start'});
+  });
+  const form=document.getElementById('registration');
+  const frame=document.getElementById('registration-target');
+  const pkg=document.getElementById('package');
+  const btn=form.querySelector('.submit');
+  let nextUrl='';
+  let submitted=false;
+  let pixSelected=false;
+
+  form.addEventListener('submit', function(e){
+    const payment=document.querySelector('input[name="meio_pagamento"]:checked');
+    if(!payment){ e.preventDefault(); return; }
+    const selected=pkg.options[pkg.selectedIndex];
+    const packagePayment=selected ? selected.dataset.payment || '' : '';
+    pixSelected=payment.value.startsWith('PIX');
+    nextUrl=pixSelected ? '' : packagePayment;
+    if(!pixSelected && !nextUrl){ e.preventDefault(); pkg.focus(); return; }
+    submitted=true;
+    btn.disabled=true;
+    btn.textContent=pixSelected ? 'REGISTRANDO...' : 'REDIRECIONANDO PARA O PAGAMENTO...';
+  });
+
+  frame.addEventListener('load', function(){
+    if(!submitted) return;
+    submitted=false;
+    if(pixSelected){
+      const result=document.getElementById('result');
+      result.style.display='block';
+      result.textContent='Dados registrados. O pagamento via PIX será disponibilizado nesta etapa.';
+      btn.disabled=false;
+      btn.textContent='CONTINUAR PARA O PAGAMENTO';
+      return;
+    }
+    window.location.href=nextUrl;
+  });
+})();
+</script>
 </body>
 </html>
