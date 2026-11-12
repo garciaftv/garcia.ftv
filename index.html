@@ -138,7 +138,7 @@ footer{background:#eee9e4;padding:30px 0;color:var(--muted);font-size:12px;text-
       <div class="package"><div class="name">Inscrição + camisa</div><div class="price">R$ 75,00</div><p>Participação no aulão com camisa do evento.</p></div>
       <div class="package featured"><div class="name">Inscrição + uniforme completo</div><div class="price">R$ 100,00</div><p>Participação no aulão com uniforme completo.</p></div>
     </div>
-    <p class="payment-note">Pagamento por Pix ou cartão de crédito (sujeito a taxas).</p>
+<p class="payment-note">Pagamento exclusivamente via PIX, sem acréscimos.</p>
     <p class="payment-note" style="margin-top:8px"><strong>Obs.:</strong> Caso o PIX seja realizado em nome de terceiro, a aluna deverá enviar o comprovante de pagamento no Direct do Instagram do aulão: <a href="https://www.instagram.com/garcia.ftv/" target="_blank" rel="noopener noreferrer" style="font-weight:800;color:var(--brown)">@garcia.ftv</a>.</p>
   </div>
 </section>
@@ -166,14 +166,10 @@ footer{background:#eee9e4;padding:30px 0;color:var(--muted);font-size:12px;text-
       <label for="package">Qual pacote você deseja? *</label>
       <select id="package" name="pacote" required>
         <option value="">Selecione o pacote</option>
-        <option value="Inscrição + camisa (R$ 75,00)" data-payment="https://mpago.li/1re2Akz">Inscrição + camisa - R$ 75,00</option>
-        <option value="Inscrição + uniforme completo (R$ 100,00)" data-payment="https://mpago.li/2JxibkG">Inscrição + uniforme completo - R$ 100,00</option>
+        <option value="Inscrição + camisa (R$ 75,00)">Inscrição + camisa - R$ 75,00</option>
+<option value="Inscrição + uniforme completo (R$ 100,00)">Inscrição + uniforme completo - R$ 100,00</option>
       </select>
-      <label>Meio de pagamento *</label>
-      <div class="choices" style="margin-bottom:16px">
-        <label class="choice"><input type="radio" name="meio_pagamento" value="PIX (sem acréscimos)" required> <span><strong>PIX</strong><small>Sem acréscimos</small></span></label>
-        <label class="choice"><input type="radio" name="meio_pagamento" value="Cartão de crédito (sujeito a taxas)" required> <span><strong>Cartão de crédito</strong><small>Sujeito a taxas</small></span></label>
-
+      <input type="hidden" name="meio_pagamento" value="PIX">
       <label for="size">Tamanho do uniforme *</label>
       <select id="size" name="tamanho" required><option value="">Selecione o tamanho</option><option>PP</option><option>P</option><option>M</option><option>G</option><option>GG</option><option>XG</option></select>
 
@@ -339,71 +335,14 @@ function startPaymentCheck(email){
 }
   
 
-  form.addEventListener('submit', function(e){
-    alert('BOTÃO FUNCIONOU');
-    
-    const payment=document.querySelector('input[name="meio_pagamento"]:checked');
-    if(!payment){ e.preventDefault(); return; }
-    const selected=pkg.options[pkg.selectedIndex];
-    const packagePayment=selected ? selected.dataset.payment || '' : '';
-    pixSelected=payment.value.startsWith('PIX');
-    if(!pixSelected){
-  e.preventDefault();
+form.addEventListener('submit', function(e){
+    pixSelected = true;
+    submitted = true;
 
-  submitted=false;
-
-  const dadosCartao={
-    nome:document.getElementById('name').value.trim(),
-    whatsapp:document.getElementById('phone').value.trim(),
-    email:document.getElementById('email').value.trim().toLowerCase(),
-    cpf:document.getElementById('cpf').value.trim(),
-    pacote:pkg.value
-  };
-
-  btn.disabled=true;
-  btn.textContent='ABRINDO MERCADO PAGO...';
-
-  fetch('https://garcia-futevolei-webhook.garcia-ftv2026.workers.dev/criar-cartao',{
-    method:'POST',
-    headers:{
-      'Content-Type':'application/json'
-    },
-    body:JSON.stringify(dadosCartao)
-  })
-  .then(function(response){
-    return response.json().then(function(data){
-      if(!response.ok || !data.sucesso){
-        throw new Error(data.mensagem || 'Não foi possível gerar o pagamento.');
-      }
-      return data;
-    });
-  })
-  .then(function(data){
-    window.location.href=data.invoiceUrl;
-  })
-  .catch(function(error){
-    console.error(error);
-
-    btn.disabled=false;
-    btn.textContent='CONTINUAR PARA O PAGAMENTO';
-
-    const result=document.getElementById('result');
-    result.style.display='block';
-    result.style.background='#f8eded';
-    result.style.color='#754040';
-    result.textContent='Não foi possível abrir o Mercado Pago. Tente novamente.';
-  });
-
-  return;
-}
-    nextUrl=pixSelected ? '' : packagePayment;
-    
-    submitted=true;
-    btn.disabled=true;
-    btn.textContent=pixSelected ? 'REGISTRANDO...' : 'REDIRECIONANDO PARA O PAGAMENTO...';
-  });
-
-  frame.addEventListener('load', function(){
+    btn.disabled = true;
+    btn.textContent = 'REGISTRANDO INSCRIÇÃO...';
+});
+  
     if(!submitted) return;
     submitted=false;
   if(pixSelected){
@@ -489,53 +428,8 @@ statusMessage.textContent='Assim que o pagamento for conferido pela organizaçã
 
   return;
     }
-const dadosCartao={
-  nome:document.getElementById('name').value.trim(),
-  whatsapp:document.getElementById('phone').value.trim(),
-  email:document.getElementById('email').value.trim().toLowerCase(),
-  cpf:document.getElementById('cpf').value.trim(),
-  pacote:pkg.value
-
-};
-
-btn.disabled=true;
-btn.textContent='GERANDO PAGAMENTO...';
-
-fetch('https://garcia-futevolei-webhook.garcia-ftv2026.workers.dev/criar-cartao',{
-  method:'POST',
-  headers:{
-    'Content-Type':'application/json'
-  },
-  body:JSON.stringify(dadosCartao)
-})
-.then(function(response){
-  return response.json().then(function(data){
-    if(!response.ok || !data.sucesso){
-      throw new Error(
-        data.mensagem || 'Não foi possível gerar o pagamento.'
-      );
-    }
-
-    return data;
   });
-})
-.then(function(data){
-  btn.textContent='ABRINDO PAGAMENTO...';
-  window.location.href=data.invoiceUrl;
-})
-.catch(function(error){
-  console.error(error);
-
-  btn.disabled=false;
-  btn.textContent='CONTINUAR PARA O PAGAMENTO';
-
-  const result=document.getElementById('result');
-  result.style.display='block';
-  result.style.background='#f8eded';
-  result.style.color='#754040';
-  result.textContent='Não foi possível gerar o pagamento no cartão. Tente novamente.';
-});
-  });
+  
   document.getElementById('copy-pix').addEventListener('click', async function(){
     const code=document.getElementById('pix-code');
     try { await navigator.clipboard.writeText(code.value); }
