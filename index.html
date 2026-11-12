@@ -349,7 +349,7 @@ function startPaymentCheck(email){
     const packagePayment=selected ? selected.dataset.payment || '' : '';
     pixSelected=payment.value.startsWith('PIX');
     nextUrl=pixSelected ? '' : packagePayment;
-    if(!pixSelected && !nextUrl){ e.preventDefault(); pkg.focus(); return; }
+    
     submitted=true;
     btn.disabled=true;
     btn.textContent=pixSelected ? 'REGISTRANDO...' : 'REDIRECIONANDO PARA O PAGAMENTO...';
