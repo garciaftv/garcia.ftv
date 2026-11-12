@@ -175,7 +175,7 @@ footer{background:#eee9e4;padding:30px 0;color:var(--muted);font-size:12px;text-
         <label class="choice"><input type="radio" name="meio_pagamento" value="Cartão de crédito (sujeito a taxas)" required> <span><strong>Cartão de crédito</strong><small>Sujeito a taxas</small></span></label>
       </div>
       <label for="size">Tamanho do uniforme *</label>
-      <select id="size" name="tamanho" required><option value="">Selecione o tamanho</option><option>PP</option><option>P</option><option>M</option><option>G</option><option>GG</option></select>
+      <select id="size" name="tamanho" required><option value="">Selecione o tamanho</option><option>PP</option><option>P</option><option>M</option><option>G</option><option>GG</option><option>XG</option></select>
 
       <div style="margin-top:22px">
         <label class="choice" style="align-items:flex-start">
@@ -205,6 +205,37 @@ footer{background:#eee9e4;padding:30px 0;color:var(--muted);font-size:12px;text-
         <small style="display:block;margin-top:8px;color:#766e68"><strong>PIX realizado em nome de terceiro?</strong> Envie o comprovante no Direct do Instagram do aulão: <a href="https://www.instagram.com/garcia.ftv/" target="_blank" rel="noopener noreferrer" style="font-weight:800;color:#634b3d">@garcia.ftv</a>.</small>
       </div>
       <div id="result" role="status"></div>
+      <div id="consulta-inscricao" style="margin-top:24px;padding:20px;border:1px solid #ded7d1;border-radius:12px;background:#fff">
+  <h3 style="margin:0 0 6px;color:#634b3d">Já realizou o pagamento?</h3>
+
+  <p style="margin:0 0 14px;color:#766e68;font-size:13px">
+    Consulte o status da sua inscrição pelo e-mail utilizado no cadastro.
+  </p>
+
+  <label for="consulta-email">E-mail utilizado na inscrição</label>
+
+  <input
+    id="consulta-email"
+    type="email"
+    placeholder="voce@email.com"
+    autocomplete="email"
+  >
+
+  <button
+    type="button"
+    id="consultar-inscricao"
+    class="submit"
+  >
+    CONSULTAR MINHA INSCRIÇÃO
+  </button>
+
+  <div
+    id="resultado-consulta"
+    style="display:none;margin-top:16px;padding:16px;border-radius:10px;text-align:center"
+    role="status"
+    aria-live="polite"
+  ></div>
+</div>
     </form>
   </div>
 </section>
@@ -414,6 +445,89 @@ statusMessage.textContent='Assim que o pagamento for conferido pela organizaçã
     this.textContent='PIX COPIADO!';
     setTimeout(()=>{this.textContent='COPIAR PIX COPIA E COLA';},1800);
   });
+
+  document.getElementById('consultar-inscricao').addEventListener('click', function(){
+  const email=document.getElementById('consulta-email').value.trim().toLowerCase();
+  const resultado=document.getElementById('resultado-consulta');
+  const botao=this;
+
+  if(!email){
+    resultado.style.display='block';
+    resultado.style.background='#fff4e5';
+    resultado.style.color='#7a5525';
+    resultado.innerHTML='Digite o e-mail utilizado na sua inscrição.';
+    return;
+  }
+
+  botao.disabled=true;
+  botao.textContent='CONSULTANDO...';
+
+  const callbackName=
+    'consultaInscricao_'+Date.now()+'_'+Math.random().toString(36).slice(2);
+
+  const script=document.createElement('script');
+
+  window[callbackName]=function(response){
+    try{
+      resultado.style.display='block';
+
+      if(response && response.encontrado && response.pago===true){
+        resultado.style.background='#eef8f1';
+        resultado.style.border='1px solid #9bc9a7';
+        resultado.style.color='#285c36';
+
+        resultado.innerHTML=
+          '✅ <strong>PAGAMENTO CONFIRMADO!</strong><br>'+
+          'Sua inscrição no Aulão de Futevôlei está garantida. 🤎🩵';
+      }
+      else if(response && response.encontrado){
+        resultado.style.background='#fff8e8';
+        resultado.style.border='1px solid #ead39b';
+        resultado.style.color='#6c5728';
+
+        resultado.innerHTML=
+          '⏳ <strong>AGUARDANDO CONFIRMAÇÃO DO PAGAMENTO</strong><br>'+
+          'Assim que o pagamento for conferido pela organização, a confirmação aparecerá aqui.';
+      }
+      else{
+        resultado.style.background='#f8eded';
+        resultado.style.border='1px solid #e1bcbc';
+        resultado.style.color='#754040';
+
+        resultado.innerHTML=
+          '<strong>Inscrição não encontrada.</strong><br>'+
+          'Confira se o e-mail informado é o mesmo utilizado no cadastro.';
+      }
+    }
+    finally{
+      botao.disabled=false;
+      botao.textContent='CONSULTAR MINHA INSCRIÇÃO';
+
+      delete window[callbackName];
+      script.remove();
+    }
+  };
+
+  script.onerror=function(){
+    resultado.style.display='block';
+    resultado.style.background='#f8eded';
+    resultado.style.color='#754040';
+    resultado.innerHTML='Não foi possível consultar agora. Tente novamente.';
+
+    botao.disabled=false;
+    botao.textContent='CONSULTAR MINHA INSCRIÇÃO';
+
+    delete window[callbackName];
+    script.remove();
+  };
+
+  script.src=
+    statusUrl+
+    '?email='+encodeURIComponent(email)+
+    '&callback='+encodeURIComponent(callbackName);
+
+  document.body.appendChild(script);
+});
 })();
 </script>
 </body>
