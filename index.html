@@ -260,7 +260,7 @@ function showPaymentConfirmed(){
 
   icon.textContent='✅';
   title.textContent='PAGAMENTO CONFIRMADO!';
-  message.textContent='Sua inscrição no Aulão Garcia Futevôlei está garantida. 🤎🩵';
+  message.textContent='Sua inscrição no Aulão de Futevôlei está garantida. 🤎🩵';
 }
 
   function checkPaymentStatus(email){
@@ -373,6 +373,9 @@ fetch('https://garcia-futevolei-webhook.garcia-ftv2026.workers.dev/criar-pix',{
   btn.textContent='PIX GERADO COM SUCESSO';
 
   const registeredEmail=dadosPix.email;
+  const statusMessage=document.getElementById('payment-status-message');
+statusMessage.textContent='Assim que o pagamento for conferido pela organização, a confirmação aparecerá automaticamente aqui.';
+  
   startPaymentCheck(registeredEmail);
 })
 .catch(function(error){
