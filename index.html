@@ -343,6 +343,8 @@ function startPaymentCheck(email){
   
 
   form.addEventListener('submit', function(e){
+    alert('BOTÃO FUNCIONOU');
+    
     const payment=document.querySelector('input[name="meio_pagamento"]:checked');
     if(!payment){ e.preventDefault(); return; }
     const selected=pkg.options[pkg.selectedIndex];
