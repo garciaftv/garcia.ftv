@@ -348,6 +348,55 @@ function startPaymentCheck(email){
     const selected=pkg.options[pkg.selectedIndex];
     const packagePayment=selected ? selected.dataset.payment || '' : '';
     pixSelected=payment.value.startsWith('PIX');
+    if(!pixSelected){
+  e.preventDefault();
+
+  submitted=false;
+
+  const dadosCartao={
+    nome:document.getElementById('name').value.trim(),
+    whatsapp:document.getElementById('phone').value.trim(),
+    email:document.getElementById('email').value.trim().toLowerCase(),
+    cpf:document.getElementById('cpf').value.trim(),
+    pacote:pkg.value
+  };
+
+  btn.disabled=true;
+  btn.textContent='ABRINDO MERCADO PAGO...';
+
+  fetch('https://garcia-futevolei-webhook.garcia-ftv2026.workers.dev/criar-cartao',{
+    method:'POST',
+    headers:{
+      'Content-Type':'application/json'
+    },
+    body:JSON.stringify(dadosCartao)
+  })
+  .then(function(response){
+    return response.json().then(function(data){
+      if(!response.ok || !data.sucesso){
+        throw new Error(data.mensagem || 'Não foi possível gerar o pagamento.');
+      }
+      return data;
+    });
+  })
+  .then(function(data){
+    window.location.href=data.invoiceUrl;
+  })
+  .catch(function(error){
+    console.error(error);
+
+    btn.disabled=false;
+    btn.textContent='CONTINUAR PARA O PAGAMENTO';
+
+    const result=document.getElementById('result');
+    result.style.display='block';
+    result.style.background='#f8eded';
+    result.style.color='#754040';
+    result.textContent='Não foi possível abrir o Mercado Pago. Tente novamente.';
+  });
+
+  return;
+}
     nextUrl=pixSelected ? '' : packagePayment;
     
     submitted=true;
