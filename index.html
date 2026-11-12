@@ -173,6 +173,22 @@ footer{background:#eee9e4;padding:30px 0;color:var(--muted);font-size:12px;text-
       <div class="choices" style="margin-bottom:16px">
         <label class="choice"><input type="radio" name="meio_pagamento" value="PIX (sem acréscimos)" required> <span><strong>PIX</strong><small>Sem acréscimos</small></span></label>
         <label class="choice"><input type="radio" name="meio_pagamento" value="Cartão de crédito (sujeito a taxas)" required> <span><strong>Cartão de crédito</strong><small>Sujeito a taxas</small></span></label>
+        <div id="card-installments" style="display:none;margin-top:16px">
+  <label for="installments">Número de parcelas *</label>
+
+  <select id="installments" name="parcelas">
+    <option value="">Selecione as parcelas</option>
+    <option value="1">1x no cartão</option>
+    <option value="2">2x no cartão</option>
+    <option value="3">3x no cartão</option>
+  </select>
+
+  <small style="display:block;margin-top:7px;color:#766e68">
+    As taxas do cartão e da antecipação são acrescentadas ao valor da inscrição.
+  </small>
+
+  <div id="card-price-preview" style="display:none;margin-top:12px;padding:13px;border-radius:9px;background:#f5f2ef;color:#634b3d;font-size:13px"></div>
+</div>
       </div>
       <label for="size">Tamanho do uniforme *</label>
       <select id="size" name="tamanho" required><option value="">Selecione o tamanho</option><option>PP</option><option>P</option><option>M</option><option>G</option><option>GG</option><option>XG</option></select>
@@ -250,6 +266,58 @@ footer{background:#eee9e4;padding:30px 0;color:var(--muted);font-size:12px;text-
     document.getElementById('inscricao').scrollIntoView({behavior:'smooth',block:'start'});
   });
   const form=document.getElementById('registration');
+  const cardInstallments=document.getElementById('card-installments');
+const installments=document.getElementById('installments');
+const cardPricePreview=document.getElementById('card-price-preview');
+
+document.querySelectorAll('input[name="meio_pagamento"]').forEach(function(option){
+  option.addEventListener('change',function(){
+
+    if(this.value.startsWith('Cartão')){
+      cardInstallments.style.display='block';
+      installments.required=true;
+    }else{
+      cardInstallments.style.display='none';
+      installments.required=false;
+      installments.value='';
+      cardPricePreview.style.display='none';
+    }
+
+  });
+
+  function updateCardPrice(){
+  const parcelas=Number(installments.value);
+  const is100=pkg.value.includes('100,00');
+
+  if(!parcelas){
+    cardPricePreview.style.display='none';
+    return;
+  }
+
+  let total=0;
+  let parcela=0;
+
+  if(is100){
+    if(parcelas===1){ total=103.85; parcela=103.85; }
+    if(parcelas===2){ total=105.97; parcela=52.99; }
+    if(parcelas===3){ total=106.98; parcela=35.66; }
+  }else{
+    if(parcelas===1){ total=78.02; parcela=78.02; }
+    if(parcelas===2){ total=79.61; parcela=39.81; }
+    if(parcelas===3){ total=80.37; parcela=26.79; }
+  }
+
+  cardPricePreview.style.display='block';
+
+  cardPricePreview.innerHTML=
+    '<strong>'+parcelas+'x de R$ '+parcela.toFixed(2).replace('.',',')+'</strong>'+
+    '<br>Valor total no cartão: R$ '+total.toFixed(2).replace('.',',')+
+    '<br><small>Taxas já incluídas.</small>';
+}
+
+installments.addEventListener('change',updateCardPrice);
+pkg.addEventListener('change',updateCardPrice);
+});
   const cpfInput=document.getElementById('cpf');
 
 cpfInput.addEventListener('input', function(){
@@ -436,7 +504,52 @@ statusMessage.textContent='Assim que o pagamento for conferido pela organizaçã
 
   return;
     }
-    window.location.href=nextUrl;
+const dadosCartao={
+  nome:document.getElementById('name').value.trim(),
+  whatsapp:document.getElementById('phone').value.trim(),
+  email:document.getElementById('email').value.trim().toLowerCase(),
+  cpf:document.getElementById('cpf').value.trim(),
+  pacote:pkg.value,
+  parcelas:Number(document.getElementById('installments').value)
+};
+
+btn.disabled=true;
+btn.textContent='GERANDO PAGAMENTO...';
+
+fetch('https://garcia-futevolei-webhook.garcia-ftv2026.workers.dev/criar-cartao',{
+  method:'POST',
+  headers:{
+    'Content-Type':'application/json'
+  },
+  body:JSON.stringify(dadosCartao)
+})
+.then(function(response){
+  return response.json().then(function(data){
+    if(!response.ok || !data.sucesso){
+      throw new Error(
+        data.mensagem || 'Não foi possível gerar o pagamento.'
+      );
+    }
+
+    return data;
+  });
+})
+.then(function(data){
+  btn.textContent='ABRINDO PAGAMENTO...';
+  window.location.href=data.invoiceUrl;
+})
+.catch(function(error){
+  console.error(error);
+
+  btn.disabled=false;
+  btn.textContent='CONTINUAR PARA O PAGAMENTO';
+
+  const result=document.getElementById('result');
+  result.style.display='block';
+  result.style.background='#f8eded';
+  result.style.color='#754040';
+  result.textContent='Não foi possível gerar o pagamento no cartão. Tente novamente.';
+});
   });
   document.getElementById('copy-pix').addEventListener('click', async function(){
     const code=document.getElementById('pix-code');
