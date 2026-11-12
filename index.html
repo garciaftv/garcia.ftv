@@ -344,100 +344,105 @@ function startPaymentCheck(email){
 }
   
 
+
 form.addEventListener('submit', function(e){
+    const payment = document.querySelector('input[name="meio_pagamento"]:checked');
+
+    if (!payment) {
+        e.preventDefault();
+        return;
+    }
+
     pixSelected = true;
     submitted = true;
 
     btn.disabled = true;
     btn.textContent = 'REGISTRANDO INSCRIÇÃO...';
 });
-  
-    if(!submitted) return;
-    submitted=false;
-  if(pixSelected){
-  const panel=document.getElementById('pix-panel');
-  const code=document.getElementById('pix-code');
-  const qr=document.getElementById('pix-qr');
-  const value=document.getElementById('pix-value');
 
-  panel.style.display='block';
+frame.addEventListener('load', function(){
+    if (!submitted) return;
 
-  code.value='';
-  qr.removeAttribute('src');
+    submitted = false;
 
-  value.textContent='Gerando seu PIX...';
-    const dadosPix={
-  nome:document.getElementById('name').value.trim(),
-  whatsapp:document.getElementById('phone').value.trim(),
-  email:document.getElementById('email').value.trim().toLowerCase(),
-  cpf:document.getElementById('cpf').value.trim(),
-  categoria:document.getElementById('category').value,
-  pacote:pkg.value,
-  tamanho:document.getElementById('size').value,
-  meio_pagamento:'PIX'
-};
+    if (pixSelected) {
+        const panel = document.getElementById('pix-panel');
+        const code = document.getElementById('pix-code');
+        const qr = document.getElementById('pix-qr');
+        const value = document.getElementById('pix-value');
 
-fetch('https://garcia-futevolei-webhook.garcia-ftv2026.workers.dev/criar-pix',{
-  method:'POST',
-  headers:{
-    'Content-Type':'application/json'
-  },
-  body:JSON.stringify(dadosPix)
-})
-.then(function(response){
-  return response.json().then(function(data){
-    if(!response.ok || !data.sucesso){
-      throw new Error(data.mensagem || 'Não foi possível gerar o PIX.');
+        panel.style.display = 'block';
+        code.value = '';
+        qr.removeAttribute('src');
+
+        value.textContent = 'Gerando seu PIX...';
+
+        const dadosPix = {
+            nome: document.getElementById('name').value.trim(),
+            whatsapp: document.getElementById('phone').value.trim(),
+            email: document.getElementById('email').value.trim().toLowerCase(),
+            cpf: document.getElementById('cpf').value.trim(),
+            categoria: document.getElementById('category').value,
+            pacote: pkg.value,
+            tamanho: document.getElementById('size').value,
+            meio_pagamento: 'PIX'
+        };
+
+        fetch('https://garcia-futevolei-webhook.garcia-ftv2026.workers.dev/criar-pix', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(dadosPix)
+        })
+        .then(function(response){
+            return response.json().then(function(data){
+                if (!response.ok || !data.sucesso) {
+                    throw new Error(data.mensagem || 'Não foi possível gerar o PIX.');
+                }
+                return data;
+            });
+        })
+        .then(function(data){
+            code.value = data.payload;
+            qr.src = 'data:image/png;base64,' + data.encodedImage;
+
+            value.textContent =
+                'Valor: R$ ' + Number(data.valor).toFixed(2).replace('.', ',');
+
+            btn.disabled = false;
+            btn.textContent = 'PIX GERADO COM SUCESSO';
+
+            const statusMessage = document.getElementById('payment-status-message');
+            statusMessage.textContent =
+                'Assim que o pagamento for conferido pela organização, a confirmação aparecerá automaticamente aqui.';
+
+            startPaymentCheck(dadosPix.email);
+        })
+        .catch(function(error){
+            console.error('Erro ao gerar PIX:', error);
+
+            value.textContent = 'Não foi possível gerar o PIX.';
+
+            code.value = '';
+
+            btn.disabled = false;
+            btn.textContent = 'TENTAR NOVAMENTE';
+
+            document.getElementById('payment-status-message').textContent =
+                'Ocorreu um erro ao gerar o PIX. Confira seus dados e tente novamente.';
+        });
+
+        panel.scrollIntoView({
+            behavior: 'smooth',
+            block: 'center'
+        });
+
+        btn.disabled = true;
+        btn.textContent = 'GERANDO PIX...';
     }
-
-    return data;
-  });
-})
-.then(function(data){
-  code.value=data.payload;
-
-  qr.src='data:image/png;base64,'+data.encodedImage;
-
-  value.textContent=
-    'Valor: R$ '+Number(data.valor).toFixed(2).replace('.',',');
-
-  btn.disabled=false;
-  btn.textContent='PIX GERADO COM SUCESSO';
-
-  const registeredEmail=dadosPix.email;
-  const statusMessage=document.getElementById('payment-status-message');
-statusMessage.textContent='Assim que o pagamento for conferido pela organização, a confirmação aparecerá automaticamente aqui.';
-  
-  startPaymentCheck(registeredEmail);
-})
-.catch(function(error){
-  console.error(error);
-
-  value.textContent='Não foi possível gerar o PIX.';
-
-  code.value='';
-
-  btn.disabled=false;
-  btn.textContent='TENTAR NOVAMENTE';
-
-  const statusMessage=
-    document.getElementById('payment-status-message');
-
-  statusMessage.textContent=
-    'Ocorreu um erro ao gerar o PIX. Confira seus dados e tente novamente.';
 });
 
-  panel.scrollIntoView({
-    behavior:'smooth',
-    block:'center'
-  });
-
-  btn.disabled=true;
-  btn.textContent='GERANDO PIX...';
-
-  return;
-    }
-  });
   
   document.getElementById('copy-pix').addEventListener('click', async function(){
     const code=document.getElementById('pix-code');
