@@ -153,6 +153,7 @@ footer{background:#eee9e4;padding:30px 0;color:var(--muted);font-size:12px;text-
         <div><label for="phone">WhatsApp *</label><input id="phone" name="whatsapp" autocomplete="tel" placeholder="(21) 99999-9999" required></div>
       </div>
       <label for="email">E-mail *</label><input id="email" name="email" type="email" autocomplete="email" placeholder="voce@email.com" required>
+      <label for="cpf">CPF *</label><input id="cpf" name="cpf" inputmode="numeric" autocomplete="off" placeholder="000.000.000-00" maxlength="14" required>
       <label for="category">Qual categoria você se enquadra? *</label>
       <select id="category" name="categoria" required>
         <option value="">Selecione sua categoria</option>
@@ -218,6 +219,17 @@ footer{background:#eee9e4;padding:30px 0;color:var(--muted);font-size:12px;text-
     document.getElementById('inscricao').scrollIntoView({behavior:'smooth',block:'start'});
   });
   const form=document.getElementById('registration');
+  const cpfInput=document.getElementById('cpf');
+
+cpfInput.addEventListener('input', function(){
+  let valor=this.value.replace(/\D/g,'').slice(0,11);
+
+  valor=valor.replace(/(\d{3})(\d)/,'$1.$2');
+  valor=valor.replace(/(\d{3})(\d)/,'$1.$2');
+  valor=valor.replace(/(\d{3})(\d{1,2})$/,'$1-$2');
+
+  this.value=valor;
+});
   const frame=document.getElementById('registration-target');
   const pkg=document.getElementById('package');
   const btn=form.querySelector('.submit');
@@ -292,10 +304,7 @@ function startPaymentCheck(email){
     checkPaymentStatus(email);
   },15000);
 }
-  const pix75='00020101021126640014br.gov.bcb.pix0121estelag0806@gmail.com0217Inscricao  Camisa520400005303986540575.005802BR5920ESTELA M DE O GARCIA6013RIO DE JANEIR62070503***63044802';
-  const pix100='00020101021126750014br.gov.bcb.pix0121estelag0806@gmail.com0228Inscricao  Uniforme Completo5204000053039865406100.005802BR5920ESTELA M DE O GARCIA6013RIO DE JANEIR62070503***6304E109';
-  const qr75='pix_75.jpeg';
-  const qr100='pix_100.jpeg';
+  
 
   form.addEventListener('submit', function(e){
     const payment=document.querySelector('input[name="meio_pagamento"]:checked');
@@ -313,22 +322,85 @@ function startPaymentCheck(email){
   frame.addEventListener('load', function(){
     if(!submitted) return;
     submitted=false;
-    if(pixSelected){
-      const panel=document.getElementById('pix-panel');
-      const code=document.getElementById('pix-code');
-      const qr=document.getElementById('pix-qr');
-      const value=document.getElementById('pix-value');
-      const is100=pkg.value.includes('100,00');
-      code.value=is100 ? pix100 : pix75;
-      qr.src=is100 ? qr100 : qr75;
-      value.textContent=is100 ? 'Valor: R$ 100,00' : 'Valor: R$ 75,00';
-      panel.style.display='block';
-      panel.scrollIntoView({behavior:'smooth',block:'center'});
-      const registeredEmail=document.getElementById('email').value.trim().toLowerCase();
-startPaymentCheck(registeredEmail);
-      btn.disabled=false;
-      btn.textContent='CONTINUAR PARA O PAGAMENTO';
-      return;
+  if(pixSelected){
+  const panel=document.getElementById('pix-panel');
+  const code=document.getElementById('pix-code');
+  const qr=document.getElementById('pix-qr');
+  const value=document.getElementById('pix-value');
+
+  panel.style.display='block';
+
+  code.value='';
+  qr.removeAttribute('src');
+
+  value.textContent='Gerando seu PIX...';
+    const dadosPix={
+  nome:document.getElementById('name').value.trim(),
+  whatsapp:document.getElementById('phone').value.trim(),
+  email:document.getElementById('email').value.trim().toLowerCase(),
+  cpf:document.getElementById('cpf').value.trim(),
+  categoria:document.getElementById('category').value,
+  pacote:pkg.value,
+  tamanho:document.getElementById('size').value,
+  meio_pagamento:'PIX'
+};
+
+fetch('https://garcia-futevolei-webhook.garcia-ftv2026.workers.dev/criar-pix',{
+  method:'POST',
+  headers:{
+    'Content-Type':'application/json'
+  },
+  body:JSON.stringify(dadosPix)
+})
+.then(function(response){
+  return response.json().then(function(data){
+    if(!response.ok || !data.sucesso){
+      throw new Error(data.mensagem || 'Não foi possível gerar o PIX.');
+    }
+
+    return data;
+  });
+})
+.then(function(data){
+  code.value=data.payload;
+
+  qr.src='data:image/png;base64,'+data.encodedImage;
+
+  value.textContent=
+    'Valor: R$ '+Number(data.valor).toFixed(2).replace('.',',');
+
+  btn.disabled=false;
+  btn.textContent='PIX GERADO COM SUCESSO';
+
+  const registeredEmail=dadosPix.email;
+  startPaymentCheck(registeredEmail);
+})
+.catch(function(error){
+  console.error(error);
+
+  value.textContent='Não foi possível gerar o PIX.';
+
+  code.value='';
+
+  btn.disabled=false;
+  btn.textContent='TENTAR NOVAMENTE';
+
+  const statusMessage=
+    document.getElementById('payment-status-message');
+
+  statusMessage.textContent=
+    'Ocorreu um erro ao gerar o PIX. Confira seus dados e tente novamente.';
+});
+
+  panel.scrollIntoView({
+    behavior:'smooth',
+    block:'center'
+  });
+
+  btn.disabled=true;
+  btn.textContent='GERANDO PIX...';
+
+  return;
     }
     window.location.href=nextUrl;
   });
