@@ -266,6 +266,7 @@ footer{background:#eee9e4;padding:30px 0;color:var(--muted);font-size:12px;text-
     document.getElementById('inscricao').scrollIntoView({behavior:'smooth',block:'start'});
   });
   const form=document.getElementById('registration');
+  const pkg=document.getElementById('package');
   const cardInstallments=document.getElementById('card-installments');
 const installments=document.getElementById('installments');
 const cardPricePreview=document.getElementById('card-price-preview');
@@ -330,7 +331,7 @@ cpfInput.addEventListener('input', function(){
   this.value=valor;
 });
   const frame=document.getElementById('registration-target');
-  const pkg=document.getElementById('package');
+  
   const btn=form.querySelector('.submit');
   let nextUrl='';
   let submitted=false;
